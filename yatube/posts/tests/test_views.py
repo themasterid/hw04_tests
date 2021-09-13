@@ -129,7 +129,8 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_object.author, self.user)
         self.assertEqual(post_object.group, self.group)
 
-    def test_forms_show_correct_instance(self):
+    def test_forms_show_correct(self):
+        """Проверка коректности формы."""
         context = {
             reverse('posts:create'),
             reverse('posts:edit',
