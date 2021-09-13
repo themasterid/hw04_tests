@@ -5,9 +5,7 @@ __pycache__/
 *.bat
 # C extensions
 *.so
-static/img/
-static/img/
-static/img/fav/
+yatube/static/
 *.png
 *.ico
 *.css
