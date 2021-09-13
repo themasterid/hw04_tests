@@ -31,7 +31,7 @@ class Post(models.Model):
     text = models.TextField(
         max_length=400,
         verbose_name='Текст поста',
-        help_text='Введите текст поста'
+        help_text='Текст нового поста'
     )
     pub_date = models.DateTimeField(
         verbose_name='Дата публикации',
@@ -50,7 +50,7 @@ class Post(models.Model):
         blank=True,
         null=True,
         verbose_name='Группа',
-        help_text='Выберите группу'
+        help_text='Группа, к которой будет относиться пост'
     )
 
     class Meta:

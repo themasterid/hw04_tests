@@ -114,7 +114,6 @@ class PostPagesTests(TestCase):
             with self.subTest(reverse_page=reverse_page):
                 response = self.authorized_client.get(reverse_page)
                 author_object = response.context['author']
-                print(author_object)
                 self.assertEqual(author_object.id, object.id)
                 self.assertEqual(author_object.username, object.username)
 
