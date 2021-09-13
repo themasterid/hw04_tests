@@ -5,7 +5,12 @@ __pycache__/
 *.bat
 # C extensions
 *.so
-static/
+static/img/
+static/img/
+static/img/fav/
+*.png
+*.ico
+*.css
 # Distribution / packaging
 .Python
 build/
