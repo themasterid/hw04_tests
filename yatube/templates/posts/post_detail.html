@@ -7,22 +7,17 @@
       <li class="list-group-item">
         Дата публикации: {{ post.pub_date|date:'d E Y' }}
       </li>
-      <li class="list-group-item">
-        Группа:
         {% if post.group %}
-        {{ post.group }}
-        {% else %}
-        ---Пусто---
-        {% endif %}
-        {% if post.group %}
+        <li class="list-group-item">
+          Группа: {{ post.group }}
           <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+        </li>
         {% endif %}
-      </li>
       <li class="list-group-item">
         Автор: {% if post.author.get_full_name %}{{ post.author.get_full_name }}{% else %}{{ post.author }}{% endif %}
       </li>
       <li class="list-group-item">
-        Всего постов автора: {{ posts_count }}
+        Всего постов автора: {{ post.author.posts.count }}
       </li>
       <li class="list-group-item">
         <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>
@@ -30,9 +25,9 @@
     </ul>
   </aside>
   <article class="col-12 col-md-9">
-    <p>{{ post }}</p>
+    <p>{{ post.text|linebreaksbr }}</p>
     {% if post.author == requser %}
-    <a class="btn btn-primary" href="{% url 'posts:edit' post.id %}">редактировать запись</a>
+      <a class="btn btn-primary" href="{% url 'posts:edit' post.id %}">редактировать запись</a>
     {% endif %}
   </article>
 </div>
