@@ -109,9 +109,6 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:profile',
                 kwargs={'username': self.user.username}): self.user,
-            reverse(
-                'posts:profile',
-                kwargs={'username': self.user.username}): self.user,
         }
         for reverse_page, object in context.items():
             with self.subTest(reverse_page=reverse_page):
