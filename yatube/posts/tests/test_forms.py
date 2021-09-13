@@ -22,6 +22,11 @@ class PostCreateFormTests(TestCase):
             slug='test_slug',
             description='Тестовое описание группы',
         )
+        cls.group_empty = Group.objects.create(
+            title='Группа без поста',
+            slug='no_post_group',
+            description='Группа без поста...',
+        )
         cls.form = PostForm()
 
     def setUp(self):
@@ -47,11 +52,34 @@ class PostCreateFormTests(TestCase):
                 'posts:profile',
                 kwargs={'username': self.user.username}))
         self.assertEqual(Post.objects.count(), posts_count + 1)
-        post_request = self.client.get(reverse('posts:index'))
-        first_object = post_request.context['page_obj'][0]
-        self.assertEqual(first_object.text, TEXT_POST)
-        self.assertEqual(first_object.author, self.user)
-        self.assertEqual(first_object.group, self.group)
+        post_req_index = self.client.get(reverse('posts:index'))
+        post_req_group = self.client.get(
+            reverse(
+                'posts:group_list',
+                kwargs={'slug': self.group.slug}))
+        post_req_profile = self.client.get(
+            reverse(
+                'posts:profile',
+                kwargs={'username': self.user.username}))
+
+        index_object = post_req_index.context['page_obj'][0]
+        self.assertEqual(index_object.text, TEXT_POST)
+        self.assertEqual(index_object.author, self.user)
+        self.assertEqual(index_object.group, self.group)
+        self.assertNotEqual(index_object.group, self.group_empty)
+
+        group_object = post_req_group.context['page_obj'][0]
+        self.assertEqual(group_object.text, TEXT_POST)
+        self.assertEqual(group_object.author, self.user)
+        self.assertEqual(group_object.group, self.group)
+        self.assertNotEqual(group_object.group, self.group_empty)
+
+        profile_object = post_req_profile.context['page_obj'][0]
+        self.assertEqual(profile_object.text, TEXT_POST)
+        self.assertEqual(profile_object.author, self.user)
+        self.assertEqual(profile_object.group, self.group)
+        self.assertNotEqual(profile_object.group, self.group_empty)
+
         self.assertTrue(
             Post.objects.filter(
                 text=TEXT_POST,
@@ -68,15 +96,15 @@ class PostEditFormTests(TestCase):
         cls.user = User.objects.create_user(
             username='post_author',
         )
-        cls.group_real = Group.objects.create(
+        cls.group = Group.objects.create(
             title='Тестовое название группы',
-            slug='group_real-slug',
+            slug='test_slug',
             description='Тестовое описание группы',
         )
         cls.post = Post.objects.create(
             text='Текст поста',
             author=PostEditFormTests.user,
-            group=PostEditFormTests.group_real,
+            group=PostEditFormTests.group,
         )
         cls.group_empty = Group.objects.create(
             title='Группа без поста',
@@ -119,4 +147,4 @@ class PostEditFormTests(TestCase):
             ).exists()
         )
         self.assertEqual(
-            Post.objects.filter(group=self.group_real).count(), 0)
+            Post.objects.filter(group=self.group).count(), 0)
