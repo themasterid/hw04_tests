@@ -5,7 +5,7 @@ __pycache__/
 *.bat
 # C extensions
 *.so
-yatube/static/
+static/
 # Distribution / packaging
 .Python
 build/
