@@ -26,7 +26,7 @@ class PostPagesTests(TestCase):
         )
         cls.group_none = Group.objects.create(
             title='None группа',
-            slug='bad-slug',
+            slug='none-slug',
             description='Описание None группы',
         )
 
@@ -105,8 +105,10 @@ class PostPagesTests(TestCase):
 
     def test_profile_page_show_correct_context(self):
         """Шаблон profile.html сформирован с правильным контекстом."""
-        # ! не закончен
         context = {
+            reverse(
+                'posts:profile',
+                kwargs={'username': self.user.username}): self.user,
             reverse(
                 'posts:profile',
                 kwargs={'username': self.user.username}): self.user,
