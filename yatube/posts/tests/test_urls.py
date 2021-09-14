@@ -3,6 +3,7 @@ from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from ..models import Group, Post
 
@@ -20,9 +21,6 @@ EDIT_URL = 'edit'
 POST_N_URL = '1'
 CREATE_URL = 'create'
 NOT_FOUND = 'unexisting_page'
-
-ABOUT_URL = 'about'
-AUTH_URL = 'auth'
 
 
 class StaticURLTests(TestCase):
@@ -54,18 +52,17 @@ class StaticURLTests(TestCase):
     def test_all_static_pages(self):
         """Проверка статичных страниц для неавторизованного пользователя."""
         field_urls_code = {
-            INDEX_URL: HTTPStatus.OK,
-            f'/{ABOUT_URL}/author/': HTTPStatus.OK,
-            f'/{ABOUT_URL}/tech/': HTTPStatus.OK,
-            f'/{NOT_FOUND}/': HTTPStatus.NOT_FOUND,
-            f'/{AUTH_URL}/signup/': HTTPStatus.OK,
-            f'/{AUTH_URL}/logout/': HTTPStatus.OK,
-            f'/{AUTH_URL}/login/': HTTPStatus.OK,
-            f'/{AUTH_URL}/password_change/': HTTPStatus.FOUND,
-            f'/{AUTH_URL}/password_change/done/': HTTPStatus.FOUND,
-            f'/{AUTH_URL}/password_reset/': HTTPStatus.OK,
-            f'/{AUTH_URL}/password_reset/done/': HTTPStatus.OK,
-            f'/{AUTH_URL}/reset/done/': HTTPStatus.OK,
+            reverse('posts:index'): HTTPStatus.OK,
+            '/unexisting_page/': HTTPStatus.NOT_FOUND,
+            reverse('users:signup'): HTTPStatus.OK,
+            reverse('users:logout'): HTTPStatus.OK,
+            reverse('users:login'): HTTPStatus.OK,
+            reverse('users:password_change'): HTTPStatus.FOUND,
+            reverse('users:password_change_done'): HTTPStatus.FOUND,
+            reverse('users:password_reset'): HTTPStatus.OK,
+            reverse('users:password_reset_done'): HTTPStatus.OK,
+            # reverse('users:password_reset_confirm'): HTTPStatus.OK,
+            reverse('users:password_reset_complete'): HTTPStatus.OK,
         }
         for url, response_code in field_urls_code.items():
             with self.subTest(url=url):
@@ -75,7 +72,7 @@ class StaticURLTests(TestCase):
     def test_unauthorized_user_urls_status_code(self):
         """Проверка status_code для неавторизованного пользователя."""
         field_urls_code = {
-            INDEX_URL: HTTPStatus.OK,
+            reverse('posts:index'): HTTPStatus.OK,
             f'/{GROUP_URL}/{SLUG_URL}/': HTTPStatus.OK,
             f'/{GROUP_URL}/{BAD_SLUG_URL}/': HTTPStatus.NOT_FOUND,
             f'/{PROFILE_URL}/{USER_AUTHOR_URL}/': HTTPStatus.OK,

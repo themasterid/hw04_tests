@@ -35,8 +35,7 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    post_list = Post.objects.filter(author=author)
-    paginator = Paginator(post_list, settings.NUMBER_POST)
+    paginator = Paginator(author.posts.all(), settings.NUMBER_POST)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     template = 'posts/profile.html'
@@ -75,5 +74,5 @@ def post_edit(request, post_id):
         form.save()
         return redirect('posts:post_detail', post_id)
     template = 'posts/create_post.html'
-    context = {'form': form, 'is_edit': True}
+    context = {'form': form, 'post': edit_post, 'is_edit': True}
     return render(request, template, context)
