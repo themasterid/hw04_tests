@@ -199,28 +199,32 @@ class PaginatorViewsTest(TestCase):
                 self.assertEqual(len(self.user_client.get(
                     reverse_page).context.get('page_obj')), len_posts)
 
-    def test_object_list_first_page(self):
-        """Проверка пагинации на первой странице."""
-        response = self.client.get(reverse('posts:index'))
-        for i in range(10):
-            page_object = response.context.get('page_obj').object_list[i]
-            expected_object = response.context['page_obj'][i]
-            self.assertEqual(page_object.author, expected_object.author)
-            self.assertEqual(page_object.text, expected_object.text)
-            self.assertEqual(page_object.group, expected_object.group)
-            self.assertEqual(
-                page_object.pub_date,
-                expected_object.pub_date)
+    '''
+    def test_views(self):
+        post_req_index = self.client.get(reverse('posts:index'))
+        post_req_group = self.client.get(
+            reverse(
+                'posts:group_list',
+                kwargs={'slug': self.group.slug}))
+        post_req_profile = self.client.get(
+            reverse(
+                'posts:profile',
+                kwargs={'username': self.user.username}))
+        index_object = post_req_index.context['page_obj'][0]
+        self.assertEqual(index_object.text, 'Текст поста')
+        self.assertEqual(index_object.author, self.user)
+        self.assertEqual(index_object.group, self.group)
+        self.assertNotEqual(index_object.group, self.group_empty)
 
-    def test_object_list_second_page(self):
-        """Проверка пагинации на следующей странице."""
-        response = self.client.get(reverse('posts:index') + '?page=2')
-        for i in range(3):
-            page_object = response.context.get('page_obj').object_list[i]
-            expected_object = response.context['page_obj'][i]
-            self.assertEqual(page_object.author, expected_object.author)
-            self.assertEqual(page_object.text, expected_object.text)
-            self.assertEqual(page_object.group, expected_object.group)
-            self.assertEqual(
-                page_object.pub_date,
-                expected_object.pub_date)
+        group_object = post_req_group.context['page_obj'][0]
+        self.assertEqual(group_object.text, 'Текст поста')
+        self.assertEqual(group_object.author, self.user)
+        self.assertEqual(group_object.group, self.group)
+        self.assertNotEqual(group_object.group, self.group_empty)
+
+        profile_object = post_req_profile.context['page_obj'][0]
+        self.assertEqual(profile_object.text, 'Текст поста')
+        self.assertEqual(profile_object.author, self.user)
+        self.assertEqual(profile_object.group, self.group)
+        self.assertNotEqual(profile_object.group, self.group_empty)
+    '''
