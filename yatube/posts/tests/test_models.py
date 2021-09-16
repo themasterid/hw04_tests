@@ -24,28 +24,29 @@ class PostModelTest(TestCase):
 
     def test_post_str(self):
         """Проверка __str__ у post."""
-        post = self.post
-        self.assertEqual(post.text[:15], str(post))
+        self.assertEqual(self.post.text[:15], str(self.post))
 
     def test_post_verbose_name(self):
         """Проверка verbose_name у post."""
-        post = self.post
         field_verboses = {
             'text': 'Текст поста',
             'pub_date': 'Дата публикации',
             'author': 'Автор',
-            'group': 'Группа',
-        }
+            'group': 'Группа', }
         for value, expected in field_verboses.items():
             with self.subTest(value=value):
-                verbose_name = post._meta.get_field(value).verbose_name
+                verbose_name = self.post._meta.get_field(value).verbose_name
                 self.assertEqual(verbose_name, expected)
 
     def test_post_help_text(self):
         """Проверка help_text у post."""
-        post = self.post
-        help_text = post._meta.get_field('text').help_text
-        self.assertEqual(help_text, 'Текст нового поста')
+        feild_help_texts = {
+            'text': 'Текст нового поста',
+            'group': 'Группа, к которой будет относиться пост', }
+        for value, expected in feild_help_texts.items():
+            with self.subTest(value=value):
+                help_text = self.post._meta.get_field(value).help_text
+                self.assertEqual(help_text, expected)
 
 
 class GroupModelTest(TestCase):
@@ -58,20 +59,13 @@ class GroupModelTest(TestCase):
             slug='Тестовый слаг',
             description='Тестовое описание',
         )
-        cls.post = Post.objects.create(
-            text='Тестовый текст больше 15 символов для проверки...',
-            author=cls.user,
-            group=cls.group,
-        )
 
     def test_group_str(self):
         """Проверка __str__ у group."""
-        group = self.group
-        self.assertEqual(group.title, str(group))
+        self.assertEqual(self.group.title, str(self.group))
 
     def test_group_verbose_name(self):
         """Проверка verbose_name у group."""
-        group = self.group
         field_verboses = {
             'title': 'Заголовок',
             'slug': 'ЧПУ',
@@ -79,11 +73,5 @@ class GroupModelTest(TestCase):
         }
         for value, expected in field_verboses.items():
             with self.subTest(value=value):
-                verbose_name = group._meta.get_field(value).verbose_name
+                verbose_name = self.group._meta.get_field(value).verbose_name
                 self.assertEqual(verbose_name, expected)
-
-    def test_group_help_text(self):
-        """Проверка help_text у group."""
-        post = self.post
-        help_text = post._meta.get_field('group').help_text
-        self.assertEqual(help_text, 'Группа, к которой будет относиться пост')

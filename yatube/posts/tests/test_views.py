@@ -30,23 +30,18 @@ class PostPagesTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def check_post_info(self, context):
-        group_other = Group.objects.create(
-            title='Другая группа',
-            slug='other_slug',
-            description='Описание другой группы',
-        )
-        self.assertEqual(context.text, self.post.text)
-        self.assertEqual(context.author, self.user)
-        self.assertEqual(context.group, self.group)
-        self.assertNotEqual(context.group, group_other)
+        for page in context:
+            with self.subTest(page=page):
+                self.assertEqual(page.text, self.post.text)
+                self.assertEqual(page.pub_date, self.post.pub_date)
+                self.assertEqual(page.author, self.post.author)
+                self.assertEqual(page.group, self.post.group)
 
     def test_forms_show_correct(self):
         """Проверка коректности формы."""
         context = {
             reverse('posts:create'),
-            reverse('posts:edit',
-                    kwargs={'post_id': self.post.id,
-                            }),
+            reverse('posts:edit', kwargs={'post_id': self.post.id, }),
         }
         for reverse_page in context:
             with self.subTest(reverse_page=reverse_page):
@@ -61,17 +56,21 @@ class PostPagesTests(TestCase):
     def test_index_page_show_correct_context(self):
         """Шаблон index.html сформирован с правильным контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
-        context = response.context['page_obj'][0]
-        self.assertFalse(self.check_post_info(context))
+        self.assertFalse(
+            self.check_post_info(
+                response.context['page_obj'].object_list))
 
     def test_groups_page_show_correct_context(self):
         """Шаблон group_list.html сформирован с правильным контекстом."""
         response = self.authorized_client.get(
             reverse(
                 'posts:group_list',
-                kwargs={'slug': self.group.slug}))
-        context = response.context['page_obj'][0]
-        self.assertFalse(self.check_post_info(context))
+                kwargs={'slug': self.group.slug})
+        )
+        self.assertEqual(response.context['group'], self.group)
+        self.assertFalse(
+            self.check_post_info(
+                response.context['page_obj'].object_list))
 
     def test_profile_page_show_correct_context(self):
         """Шаблон profile.html сформирован с правильным контекстом."""
@@ -79,16 +78,19 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:profile',
                 kwargs={'username': self.user.username}))
-        context = response.context['page_obj'][0]
-        self.assertFalse(self.check_post_info(context))
+        self.assertEqual(response.context['author'], self.user)
+        self.assertIn(self.post, response.context['page_obj'])
+        self.assertFalse(
+            self.check_post_info(
+                response.context['page_obj'].object_list))
 
     def test_detail_page_show_correct_context(self):
         """Шаблон post_detail.html сформирован с правильным контекстом."""
         response = self.authorized_client.get(
-            reverse('posts:post_detail',
-                    kwargs={'post_id': self.post.id}))
-        context = response.context['post']
-        self.assertFalse(self.check_post_info(context))
+            reverse(
+                'posts:post_detail',
+                kwargs={'post_id': self.post.id}))
+        self.assertEqual(response.context['post'], self.post)
 
 
 class PaginatorViewsTest(TestCase):
@@ -103,14 +105,12 @@ class PaginatorViewsTest(TestCase):
             slug='test_slug',
             description='Тестовое описание группы',
         )
-
-        _ = [
+        for i in range(13):
             Post.objects.create(
                 text=f'Пост #{i}',
                 author=cls.user,
-                group=cls.group)
-            for i in range(13)
-        ]
+                group=cls.group
+            )
 
     def setUp(self):
         self.unauthorized_client = Client()

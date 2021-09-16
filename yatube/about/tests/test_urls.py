@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from django.test import Client, TestCase
+from django.urls import reverse
 
 
 class StaticURLTests(TestCase):
@@ -10,8 +11,8 @@ class StaticURLTests(TestCase):
     def test_about_url_exists_at_desired_location(self):
         """Проверка адреса about."""
         url_code = {
-            '/about/author/': HTTPStatus.OK,
-            '/about/tech/': HTTPStatus.OK,
+            reverse('about:author'): HTTPStatus.OK,
+            reverse('about:tech'): HTTPStatus.OK,
         }
         for url, code in url_code.items():
             with self.subTest(url=url):
@@ -21,8 +22,8 @@ class StaticURLTests(TestCase):
     def test_about_url_uses_correct_template(self):
         """Проверка шаблона about."""
         url_templates = {
-            '/about/author/': 'about/author.html',
-            '/about/tech/': 'about/tech.html',
+            reverse('about:author'): 'about/author.html',
+            reverse('about:tech'): 'about/tech.html',
         }
         for url, template in url_templates.items():
             with self.subTest(url=url):

@@ -12,7 +12,7 @@ class Group(models.Model):
     slug = models.SlugField(
         max_length=200,
         unique=True,
-        verbose_name='ЧПУ'
+        verbose_name='ЧПУ',
     )
     description = models.TextField(
         max_length=400,

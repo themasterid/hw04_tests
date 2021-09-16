@@ -44,13 +44,13 @@ class PostFormTests(TestCase):
             response,
             reverse(
                 'posts:profile',
-                kwargs={'username': self.post_author.username}))
-        self.assertEqual(Post.objects.count(), posts_count + 1)
-        get_post_inf = Post.objects.latest('id')
-        self.assertTrue(
-            get_post_inf.text == form_data['text'],
-            get_post_inf.group_id == self.group.id,
+                kwargs={'username': self.post_author.username})
         )
+        self.assertEqual(Post.objects.count(), posts_count + 1)
+        post = Post.objects.latest('id')
+        self.assertTrue(post.text == form_data['text'])
+        self.assertTrue(post.author == self.post_author)
+        self.assertTrue(post.group_id == form_data['group'])
 
     def test_authorized_user_edit_post(self):
         """Проверка редактирования записи авторизированным клиентом."""
@@ -72,16 +72,17 @@ class PostFormTests(TestCase):
         )
         self.assertRedirects(
             response,
-            reverse('posts:post_detail', kwargs={'post_id': post.id}))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        post_info = Post.objects.latest('id')
-        self.assertTrue(
-            post_info.text == form_data['text'],
-            post_info.group_id == self.group.id,
+            reverse('posts:post_detail', kwargs={'post_id': post.id})
         )
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        post = Post.objects.latest('id')
+        self.assertTrue(post.text == form_data['text'])
+        self.assertTrue(post.author == self.post_author)
+        self.assertTrue(post.group_id == form_data['group'])
 
     def test_nonauthorized_user_create_post(self):
         """Проверка создания записи не авторизированным пользователем."""
+        posts_count = Post.objects.count()
         form_data = {
             'text': 'Текст поста',
             'group': self.group.id,
@@ -94,3 +95,4 @@ class PostFormTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         redirect = reverse('login') + '?next=' + reverse('posts:create')
         self.assertRedirects(response, redirect)
+        self.assertEqual(Post.objects.count(), posts_count)
