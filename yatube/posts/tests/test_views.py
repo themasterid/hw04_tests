@@ -35,7 +35,7 @@ class PostPagesTests(TestCase):
                 self.assertEqual(page.text, self.post.text)
                 self.assertEqual(page.pub_date, self.post.pub_date)
                 self.assertEqual(page.author, self.post.author)
-                self.assertEqual(page.group, self.post.group)
+                self.assertEqual(page.group.id, self.post.group.id)
 
     def test_forms_show_correct(self):
         """Проверка коректности формы."""
@@ -56,9 +56,7 @@ class PostPagesTests(TestCase):
     def test_index_page_show_correct_context(self):
         """Шаблон index.html сформирован с правильным контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
-        self.assertFalse(
-            self.check_post_info(
-                response.context['page_obj'].object_list))
+        self.check_post_info(response.context['page_obj'])
 
     def test_groups_page_show_correct_context(self):
         """Шаблон group_list.html сформирован с правильным контекстом."""
@@ -68,9 +66,7 @@ class PostPagesTests(TestCase):
                 kwargs={'slug': self.group.slug})
         )
         self.assertEqual(response.context['group'], self.group)
-        self.assertFalse(
-            self.check_post_info(
-                response.context['page_obj'].object_list))
+        self.check_post_info(response.context['page_obj'])
 
     def test_profile_page_show_correct_context(self):
         """Шаблон profile.html сформирован с правильным контекстом."""
@@ -80,9 +76,7 @@ class PostPagesTests(TestCase):
                 kwargs={'username': self.user.username}))
         self.assertEqual(response.context['author'], self.user)
         self.assertIn(self.post, response.context['page_obj'])
-        self.assertFalse(
-            self.check_post_info(
-                response.context['page_obj'].object_list))
+        self.check_post_info(response.context['page_obj'])
 
     def test_detail_page_show_correct_context(self):
         """Шаблон post_detail.html сформирован с правильным контекстом."""
@@ -90,7 +84,7 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:post_detail',
                 kwargs={'post_id': self.post.id}))
-        self.assertEqual(response.context['post'], self.post)
+        self.check_post_info([response.context['post']])
 
 
 class PaginatorViewsTest(TestCase):

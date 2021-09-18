@@ -48,9 +48,9 @@ class PostFormTests(TestCase):
         )
         self.assertEqual(Post.objects.count(), posts_count + 1)
         post = Post.objects.latest('id')
-        self.assertTrue(post.text == form_data['text'])
-        self.assertTrue(post.author == self.post_author)
-        self.assertTrue(post.group_id == form_data['group'])
+        self.assertEqual(post.text, form_data['text'])
+        self.assertEqual(post.author, self.post_author)
+        self.assertEqual(post.group_id, form_data['group'])
 
     def test_authorized_user_edit_post(self):
         """Проверка редактирования записи авторизированным клиентом."""

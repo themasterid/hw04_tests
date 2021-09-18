@@ -11,15 +11,9 @@ class PostModelTest(TestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.user = User.objects.create_user(username='auth')
-        cls.group = Group.objects.create(
-            title='Тестовая группа',
-            slug='Тестовый слаг',
-            description='Тестовое описание',
-        )
         cls.post = Post.objects.create(
             text='Тестовый текст больше 15 символов для проверки...',
             author=cls.user,
-            group=cls.group,
         )
 
     def test_post_str(self):
