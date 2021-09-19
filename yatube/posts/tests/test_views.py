@@ -30,12 +30,11 @@ class PostPagesTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def check_post_info(self, context):
-        for page in context:
-            with self.subTest(page=page):
-                self.assertEqual(page.text, self.post.text)
-                self.assertEqual(page.pub_date, self.post.pub_date)
-                self.assertEqual(page.author, self.post.author)
-                self.assertEqual(page.group.id, self.post.group.id)
+        with self.subTest(context=context):
+            self.assertEqual(context.text, self.post.text)
+            self.assertEqual(context.pub_date, self.post.pub_date)
+            self.assertEqual(context.author, self.post.author)
+            self.assertEqual(context.group.id, self.post.group.id)
 
     def test_forms_show_correct(self):
         """Проверка коректности формы."""
@@ -56,7 +55,7 @@ class PostPagesTests(TestCase):
     def test_index_page_show_correct_context(self):
         """Шаблон index.html сформирован с правильным контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
-        self.check_post_info(response.context['page_obj'])
+        self.check_post_info(response.context['page_obj'][0])
 
     def test_groups_page_show_correct_context(self):
         """Шаблон group_list.html сформирован с правильным контекстом."""
@@ -66,7 +65,7 @@ class PostPagesTests(TestCase):
                 kwargs={'slug': self.group.slug})
         )
         self.assertEqual(response.context['group'], self.group)
-        self.check_post_info(response.context['page_obj'])
+        self.check_post_info(response.context['page_obj'][0])
 
     def test_profile_page_show_correct_context(self):
         """Шаблон profile.html сформирован с правильным контекстом."""
@@ -75,8 +74,7 @@ class PostPagesTests(TestCase):
                 'posts:profile',
                 kwargs={'username': self.user.username}))
         self.assertEqual(response.context['author'], self.user)
-        self.assertIn(self.post, response.context['page_obj'])
-        self.check_post_info(response.context['page_obj'])
+        self.check_post_info(response.context['page_obj'][0])
 
     def test_detail_page_show_correct_context(self):
         """Шаблон post_detail.html сформирован с правильным контекстом."""
@@ -84,7 +82,7 @@ class PostPagesTests(TestCase):
             reverse(
                 'posts:post_detail',
                 kwargs={'post_id': self.post.id}))
-        self.check_post_info([response.context['post']])
+        self.check_post_info(response.context['post'])
 
 
 class PaginatorViewsTest(TestCase):
