@@ -7,6 +7,7 @@
 Покрытие тестами проекта Yatube из спринта 4 Питон-разработчика бекенда Яндекс.Практикум.
 Все что нужно, это покрыть тестами проект, в учебных целях.
 Стек:
+- Python 3.10.5
 - django-debug-toolbar 2.2
 - django 2.2.28
 - pytest-django 3.8.0
@@ -16,6 +17,7 @@
 - six 1.14.0
 - sorl-thumbnail 12.6.3
 - mixer 7.1.2
+- pillow==9.2.0
 
 ### Настройка и запуск на ПК
 
@@ -67,8 +69,6 @@ pip install -r requirements.txt
 
 ```bash
 python yatube/manage.py makemigrations
-```
-```bash
 python yatube/manage.py migrate
 ```
 
@@ -122,36 +122,11 @@ pytest
 ```bash
 
 pytest
-
-====================================================== test session starts =======================================================
-platform win32 -- Python 3.9.7, pytest-6.2.5, py-1.10.0, pluggy-0.13.1 -- ...hw03_forms\venv\Scripts\python.exe
-django: settings: yatube.settings (from ini)
-rootdir: ...\hw03_forms, configfile: pytest.ini, testpaths: tests/
-plugins: Faker-12.0.0, django-3.8.0, pythonpath-0.7.3
-collected 20 items
-
-tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_view_get PASSED                                       [  5%]
-tests/test_paginator.py::TestGroupPaginatorView::test_group_paginator_not_in_context_view PASSED                            [ 10%]
-tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_not_in_view_context PASSED                            [ 15%]
-tests/test_paginator.py::TestGroupPaginatorView::test_index_paginator_view PASSED                                           [ 20%]
-tests/test_paginator.py::TestGroupPaginatorView::test_profile_paginator_view PASSED                                         [ 25%]
-tests/test_about.py::TestTemplateView::test_about_author_tech PASSED                                                        [ 30%]
-tests/test_auth_urls.py::TestAuthUrls::test_auth_urls PASSED                                                                [ 35%]
-tests/test_create.py::TestCreateView::test_create_view_get PASSED                                                           [ 40%]
-tests/test_create.py::TestCreateView::test_create_view_post PASSED                                                          [ 45%]
-tests/test_homework.py::TestPost::test_post_create PASSED                                                                   [ 50%]
-tests/test_homework.py::TestGroup::test_group_create PASSED                                                                 [ 55%]
-tests/test_homework.py::TestGroupView::test_group_view PASSED                                                               [ 60%]
-tests/test_post.py::TestPostView::test_post_view_get PASSED                                                                 [ 65%]
-tests/test_post.py::TestPostEditView::test_post_edit_view_get PASSED                                                        [ 70%]
-tests/test_post.py::TestPostEditView::test_post_edit_view_author_get PASSED                                                 [ 75%]
-tests/test_post.py::TestPostEditView::test_post_edit_view_author_post PASSED                                                [ 80%]
-tests/test_profile.py::TestProfileView::test_profile_view_get PASSED                                                        [ 85%]
-tests/test_homework.py::TestPost::test_post_model PASSED                                                                    [ 90%]
-tests/test_homework.py::TestPost::test_post_admin PASSED                                                                    [ 95%]
-tests/test_homework.py::TestGroup::test_group_model PASSED                                                                  [100%]
-
-======================================================= 20 passed in 1.96s =======================================================
+ОТРЕДАКТИРОВАТЬ ПОСЛЕ УСТРАНЕНИЯ
+FAILED tests/test_create.py::TestCreateView::test_create_view_get - AssertionError: Проверьте, чт...
+FAILED tests/test_homework.py::TestGroupView::test_group_view - AssertionError: Отредактируйте HT...
+FAILED tests/test_post.py::TestPostEditView::test_post_edit_view_author_get - AssertionError: Про...
+============================ 3 failed, 17 passed, 33 warnings in 2.98s ============================ 
 ```
 
 Запускаем проект:
