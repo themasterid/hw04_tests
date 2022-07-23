@@ -9,6 +9,7 @@ yatube/static/
 *.png
 *.ico
 *.css
+media/
 # Distribution / packaging
 .Python
 build/

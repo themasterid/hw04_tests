@@ -1,11 +1,11 @@
+
 {% extends 'base.html' %}
 {% load thumbnail %}
-{% block title %}Последние обновления на сайте{% endblock %}
+{% block title %}Подписки{% endblock %}
 {% block content %}
 {% include 'posts/includes/switcher.html' %}
-{% load cache %}
-{% cache 20 index_page %}
-{% for post in page_obj %}
+{% for post in page %}
+
     <ul class="list-group">
     <li class="list-group-item list-group-item-light">
       Автор: <a href="{% url 'posts:profile' post.author %}">
@@ -35,7 +35,6 @@
 
 {% if not forloop.last %}<hr>{% endif %}
 {% endfor %}
-{% endcache %}
 <div class="d-flex justify-content-center">
     {% include 'posts/includes/paginator.html' %}
 </div>

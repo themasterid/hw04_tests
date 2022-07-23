@@ -6,7 +6,14 @@ SECRET_KEY = 's3vk^7l6+rf$b4(k1_wuik6cn&$z!zm&w!35@eyc9$(ur9vx@r'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '[::1]',
+    'testserver',
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 
@@ -29,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +67,12 @@ TEMPLATES = [
         },
     },
 ]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 
 WSGI_APPLICATION = 'yatube.wsgi.application'
 
@@ -101,3 +115,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 NUMBER_POST = 10
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

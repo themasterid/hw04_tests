@@ -29,12 +29,11 @@ class PostPagesTests(TestCase):
         self.authorized_client = Client()
         self.authorized_client.force_login(self.user)
 
-    def check_post_info(self, context):
-        with self.subTest(context=context):
-            self.assertEqual(context.text, self.post.text)
-            self.assertEqual(context.pub_date, self.post.pub_date)
-            self.assertEqual(context.author, self.post.author)
-            self.assertEqual(context.group.id, self.post.group.id)
+    def check_post_info(self, post):
+        with self.subTest(post=post):
+            self.assertEqual(post.text, self.post.text)
+            self.assertEqual(post.author, self.post.author)
+            self.assertEqual(post.group.id, self.post.group.id)
 
     def test_forms_show_correct(self):
         """Проверка коректности формы."""
