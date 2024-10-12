@@ -1,5 +1,5 @@
 django-debug-toolbar==2.2.1
-django==3.2.25
+django==4.2.16
 pytest-django==3.8.0
 pytest-pythonpath==0.7.3
 pytest==6.2.4
