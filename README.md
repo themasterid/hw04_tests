@@ -6,19 +6,31 @@
 
 Покрытие тестами проекта Yatube из спринта 4 Питон-разработчика бекенда Яндекс.Практикум.
 Все что нужно, это покрыть тестами проект, в учебных целях.
+
 Стек (обновить):
-- Python 3.10.5
-- django-debug-toolbar 2.2
-- django 4
-- pytest-django 3.8.0
-- pytest-pythonpath 0.7.3
-- pytest 5.3.5
-- requests 2.22.0
-- six 1.14.0
-- sorl-thumbnail 12.6.3
-- mixer 7.1.2
-- pillow==9.2.0
-- Faker==7.0.0 (уточнить по версии, для Python 3.10.5)
+ + Python 3.12
+ + asgiref==3.8.1
+ + certifi==2025.1.31
+ + charset-normalizer==3.4.1
+ + django==5.1.6
+ + django-debug-toolbar==5.0.1
+ + django-environ==0.12.0
+ + faker==12.0.1
+ + idna==3.10
+ + iniconfig==2.0.0
+ + mixer==7.2.2
+ + packaging==24.2
+ + pillow==11.1.0
+ + pluggy==1.5.0
+ + pytest==8.3.4
+ + pytest-django==4.9.0
+ + pytest-pythonpath==0.7.3
+ + python-dateutil==2.9.0.post0
+ + requests==2.32.3
+ + six==1.17.0
+ + sorl-thumbnail==12.11.0
+ + sqlparse==0.5.3
+ + urllib3==2.3.0
 
 ### Настройка и запуск на ПК
 
@@ -43,13 +55,13 @@ cd hw04_tests
 Устанавливаем виртуальное окружение:
 
 ```bash
-python -m venv venv
+uv venv
 ```
 
 Активируем виртуальное окружение:
 
 ```bash
-source venv/Scripts/activate
+source .venv/bin/activate
 ```
 
 > Для деактивации виртуального окружения выполним (после работы):
@@ -60,29 +72,26 @@ source venv/Scripts/activate
 Устанавливаем зависимости:
 
 ```bash
-python -m pip install --upgrade pip
-```
-```bash
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 ```
 
 Применяем миграции:
 
 ```bash
-python yatube/manage.py makemigrations
-python yatube/manage.py migrate
+python3 yatube/manage.py makemigrations
+python3 yatube/manage.py migrate
 ```
 
 Создаем супер пользователя:
 
 ```bash
-python yatube/manage.py createsuperuser
+python3 yatube/manage.py createsuperuser
 ```
 
 При желании делаем коллекцию статики:
 
 ```bash
-python yatube/manage.py collectstatic
+python3 yatube/manage.py collectstatic
 ```
 
 Предварительно сняв комментарий с:
@@ -133,7 +142,7 @@ FAILED tests/test_post.py::TestPostEditView::test_post_edit_view_author_get - As
 Запускаем проект:
 
 ```bash
-python yatube/manage.py runserver localhost:80
+python3 yatube/manage.py runserver localhost:80
 ```
 
 После чего проект будет доступен по адресу http://localhost/
